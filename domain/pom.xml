@@ -12,5 +12,13 @@
 
     <artifactId>domain</artifactId>
     <version>${revision}</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.tinqinacademy.hotel</groupId>
+            <artifactId>restexport</artifactId>
+            <version>${hotel.rest-export.version}</version>
+        </dependency>
+    </dependencies>
     
 </project>
