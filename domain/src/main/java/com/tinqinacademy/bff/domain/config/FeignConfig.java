@@ -1,6 +1,7 @@
 package com.tinqinacademy.bff.domain.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinqinacademy.auth.restexport.AuthRestExport;
 import com.tinqinacademy.hotel.restexport.clients.HotelRestExport;
 import feign.Feign;
 import feign.jackson.JacksonDecoder;
@@ -19,6 +20,9 @@ public class FeignConfig {
     @Value("${env.HOTEL_FEIGN_URL}")
     private String hotelFeignUrl;
 
+    @Value("${env.AUTH_FEIGN_URL}")
+    private String authFeignUrl;
+
     @Bean
     public HotelRestExport hotelRestExportClient() {
         return Feign.builder()
@@ -28,6 +32,18 @@ public class FeignConfig {
                 .logger(new Slf4jLogger(HotelRestExport.class))
                 .target(HotelRestExport.class, hotelFeignUrl);
     }
+
+    @Bean
+    public AuthRestExport authRestExportClient() {
+        return Feign.builder()
+                .client(okHttpClient())
+                .encoder(new JacksonEncoder(objectMapper))
+                .decoder(new JacksonDecoder(objectMapper))
+                .logger(new Slf4jLogger(AuthRestExport.class))
+                .target(AuthRestExport.class, authFeignUrl);
+    }
+
+
 
     @Bean
     public OkHttpClient okHttpClient() {

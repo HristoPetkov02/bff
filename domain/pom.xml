@@ -19,6 +19,12 @@
             <artifactId>restexport</artifactId>
             <version>${hotel.rest-export.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.tinqinacademy.auth</groupId>
+            <artifactId>restexport</artifactId>
+            <version>${auth.rest-export.version}</version>
+        </dependency>
     </dependencies>
     
 </project>
