@@ -1,7 +1,7 @@
 package com.tinqinacademy.bff.rest.config;
 
-import com.tinqinacademy.auth.api.restroutes.RestApiRoutes;
 import com.tinqinacademy.bff.api.exceptions.BffApiException;
+import com.tinqinacademy.bff.api.restroutes.RestApiRoutes;
 import com.tinqinacademy.bff.rest.security.JwtAuthenticationEntryPoint;
 import com.tinqinacademy.bff.rest.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
