@@ -1,4 +1,4 @@
-package com.tinqinacademy.bff.core.exceptions;
+package com.tinqinacademy.bff.api.exceptions;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

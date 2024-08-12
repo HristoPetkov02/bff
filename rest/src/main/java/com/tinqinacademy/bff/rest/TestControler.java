@@ -1,5 +1,6 @@
 package com.tinqinacademy.bff.rest;
 
+import com.tinqinacademy.auth.restexport.AuthRestExport;
 import com.tinqinacademy.bff.domain.feignclients.HotelClient;
 import com.tinqinacademy.hotel.api.operations.availablerooms.AvailableRoomsOutput;
 import com.tinqinacademy.hotel.api.operations.partiallyupdate.PartiallyUpdateInput;
@@ -21,6 +22,12 @@ import java.time.LocalDate;
 public class TestControler {
     private final HotelRestExport hotelRestExport;
     private final HotelClient hotelClient;
+    private final AuthRestExport authRestExport;
+
+    @GetMapping(com.tinqinacademy.auth.api.restroutes.RestApiRoutes.API_AUTH_CHECK_JWT)
+    public ResponseEntity<?> test(@RequestHeader(value = "Authorization",required = false) String token) {
+        return ResponseEntity.ok(authRestExport.validateJwt(token));
+    }
 
 
     @GetMapping("/room/{roomId}")

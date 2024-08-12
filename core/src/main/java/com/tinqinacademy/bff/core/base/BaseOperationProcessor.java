@@ -6,7 +6,7 @@ import com.tinqinacademy.bff.api.base.OperationInput;
 import com.tinqinacademy.bff.api.base.OperationOutput;
 import com.tinqinacademy.bff.api.interfaces.ErrorHandlerService;
 import com.tinqinacademy.bff.api.model.Error;
-import com.tinqinacademy.bff.core.exceptions.BffValidationException;
+import com.tinqinacademy.bff.api.exceptions.BffValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;

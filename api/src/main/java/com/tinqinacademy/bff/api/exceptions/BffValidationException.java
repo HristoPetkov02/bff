@@ -1,4 +1,4 @@
-package com.tinqinacademy.bff.core.exceptions;
+package com.tinqinacademy.bff.api.exceptions;
 
 import com.tinqinacademy.bff.api.model.Error;
 import lombok.Getter;
