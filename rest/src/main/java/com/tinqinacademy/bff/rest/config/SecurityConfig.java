@@ -1,7 +1,7 @@
 package com.tinqinacademy.bff.rest.config;
 
 import com.tinqinacademy.bff.api.exceptions.BffApiException;
-import com.tinqinacademy.bff.api.restroutes.RestApiRoutes;
+import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.security.JwtAuthenticationEntryPoint;
 import com.tinqinacademy.bff.rest.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +24,11 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private final String[] USER_URLS = {
-            RestApiRoutes.API_AUTH_CHECK_JWT
+            BffRestApiRoutes.API_AUTH_CHECK_JWT
     };
 
     private final String[] ADMIN_URLS = {
+            BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM
 
     };
 

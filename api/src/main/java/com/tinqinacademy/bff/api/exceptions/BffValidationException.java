@@ -11,8 +11,7 @@ public class BffValidationException extends RuntimeException{
     private final List<Error> errors;
     private final HttpStatus status;
 
-    public BffValidationException(String message, List<Error> errors, HttpStatus status){
-        super(message);
+    public BffValidationException(List<Error> errors, HttpStatus status){
         this.errors = errors;
         this.status = status;
     }

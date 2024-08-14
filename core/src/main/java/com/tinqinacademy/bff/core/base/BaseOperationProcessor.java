@@ -35,7 +35,6 @@ public abstract class BaseOperationProcessor<I extends OperationInput, O extends
                             .message(violation.getMessage())
                             .build()).collect(Collectors.toList());
             throw new BffValidationException(
-                    "Error validating input",
                     errors,
                     HttpStatus.BAD_REQUEST);
         }
