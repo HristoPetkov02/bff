@@ -15,9 +15,9 @@ import io.vavr.control.Try;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @Slf4j
 public class AddRoomBffOperationProcessor extends BaseOperationProcessor<AddRoomBffInput, AddRoomBffOutput> implements AddRoomBffOperation {
     private final HotelRestExport hotelRestExport;
