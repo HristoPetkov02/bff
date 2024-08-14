@@ -1,8 +1,8 @@
 package com.tinqinacademy.bff.rest.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinqinacademy.auth.api.operations.validatejwt.ValidateJwtOutput;
 import com.tinqinacademy.auth.restexport.AuthRestExport;
+import com.tinqinacademy.bff.rest.context.UserContext;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,13 +12,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtDecoder jwtDecoder;
     private final AuthRestExport authRestExport;
+    private final UserContext userContext;
 
 
     @Override
@@ -54,6 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                userContext.setUserId(id);
             } catch (Exception e) {
                 filterChain.doFilter(request, response);
                 return;

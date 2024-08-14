@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +69,25 @@ public class ErrorHandlerServiceImpl implements ErrorHandlerService {
 
 
     private ErrorWrapper handleFeignException(FeignException ex) {
+        try {
+            String responseBody = ex.contentUTF8();
+
+            List<Error> errors = objectMapper.readValue(responseBody, objectMapper.getTypeFactory().constructCollectionType(List.class, Error.class));
+
+            return ErrorWrapper.builder()
+                    .errors(errors)
+                    .errorCode(HttpStatus.valueOf(ex.status()))
+                    .build();
+        } catch (IOException e) {
+            return ErrorWrapper.builder()
+                    .errors(Collections.singletonList(Error.builder().message(ex.getMessage()).build()))
+                    .errorCode(HttpStatus.valueOf(ex.status()))
+                    .build();
+        }
+    }
+
+
+    /*private ErrorWrapper handleFeignException(FeignException ex) {
         String defaultErrorMessage = "Unknown error occurred";
         List<Error> errorList = new ArrayList<>();
 
@@ -106,5 +126,5 @@ public class ErrorHandlerServiceImpl implements ErrorHandlerService {
                 .errors(errorList)
                 .errorCode(HttpStatus.valueOf(ex.status()))
                 .build();
-    }
+    }*/
 }
