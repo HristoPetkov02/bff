@@ -6,6 +6,8 @@ import com.tinqinacademy.bff.api.operations.hotelservice.system.registervisitors
 import com.tinqinacademy.bff.api.operations.hotelservice.system.registervisitors.RegisterVisitorsBffOperation;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.report.ReportBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.report.ReportBffOperation;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.updateroom.UpdateRoomBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.updateroom.UpdateRoomBffOperation;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.base.BaseController;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +26,7 @@ public class SystemController extends BaseController {
     private final AddRoomBffOperation addRoomBffOperation;
     private final RegisterVisitorsBffOperation registerVisitorsBffOperation;
     private final ReportBffOperation reportBffOperation;
+    private final UpdateRoomBffOperation updateRoomBffOperation;
 
 
     @Operation(summary = "Register visitors",
@@ -89,5 +92,22 @@ public class SystemController extends BaseController {
                 .build();
 
         return handle(reportBffOperation.process(input));
+    }
+
+
+    @Operation(summary = "Update room",
+            description = " This endpoint is for updating the info of a room",
+            tags = {"Hotel"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The room was successfully updated"),
+            @ApiResponse(responseCode = "400", description = "The roomId is in the wrong format"),
+            @ApiResponse(responseCode = "404", description = "There is no room with this id")
+    })
+    @PutMapping(BffRestApiRoutes.HOTEL_API_SYSTEM_UPDATE_ROOM)
+    public ResponseEntity<?> updateRoom(@PathVariable String roomId, @RequestBody UpdateRoomBffInput input){
+        UpdateRoomBffInput updatedInput = input.toBuilder()
+                .roomId(roomId)
+                .build();
+        return handle(updateRoomBffOperation.process(updatedInput));
     }
 }
