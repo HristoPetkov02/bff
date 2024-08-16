@@ -2,27 +2,29 @@ package com.tinqinacademy.bff.rest.controllers.hotelcontrollers;
 
 import com.tinqinacademy.bff.api.operations.hotel.availablerooms.AvailableRoomsBffInput;
 import com.tinqinacademy.bff.api.operations.hotel.availablerooms.AvailableRoomsBffOperation;
+import com.tinqinacademy.bff.api.operations.hotel.bookroom.BookRoomBffInput;
+import com.tinqinacademy.bff.api.operations.hotel.bookroom.BookRoomBffOperation;
 import com.tinqinacademy.bff.api.operations.hotel.getroom.GetRoomBffInput;
 import com.tinqinacademy.bff.api.operations.hotel.getroom.GetRoomBffOperation;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.base.BaseController;
+import com.tinqinacademy.bff.rest.context.UserContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
 public class HotelController extends BaseController {
+    private final UserContext userContext;
     private final AvailableRoomsBffOperation availableRoomsBffOperation;
     private final GetRoomBffOperation getRoomBffOperation;
+    private final BookRoomBffOperation bookRoomBffOperation;
 
     @Operation(summary = "Check available rooms",
             description = " This endpoint is for checking available rooms by criteria",
@@ -71,4 +73,19 @@ public class HotelController extends BaseController {
 
 
 
+    @Operation(summary = "Book a room", description = " This endpoint is booking a room")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully has been booked the room "),
+            @ApiResponse(responseCode = "400", description = "The room is unavailable"),
+            @ApiResponse(responseCode = "404", description = "The room doesn't exist")
+    })
+    @PostMapping(BffRestApiRoutes.HOTEL_API_HOTEL_BOOK_ROOM)
+    public ResponseEntity<?> bookRoom(@PathVariable String roomId,@RequestBody BookRoomBffInput input) {
+        BookRoomBffInput updatedInput = input
+                .toBuilder()
+                .roomId(roomId)
+                .userId(userContext.getUserId())
+                .build();
+        return handle(bookRoomBffOperation.process(updatedInput));
+    }
 }

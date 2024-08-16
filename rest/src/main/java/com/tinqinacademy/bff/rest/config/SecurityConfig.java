@@ -24,12 +24,12 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private final String[] USER_URLS = {
-            BffRestApiRoutes.API_AUTH_CHECK_JWT
+            BffRestApiRoutes.API_AUTH_CHECK_JWT,
+            BffRestApiRoutes.HOTEL_API_HOTEL_BOOK_ROOM,
     };
 
     private final String[] ADMIN_URLS = {
             BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM
-
     };
 
     @Bean
