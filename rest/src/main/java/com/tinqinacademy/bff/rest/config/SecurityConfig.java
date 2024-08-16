@@ -30,7 +30,13 @@ public class SecurityConfig {
     };
 
     private final String[] ADMIN_URLS = {
-            BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM
+            BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM,
+            BffRestApiRoutes.HOTEL_API_SYSTEM_REGISTER_VISITOR
+    };
+
+    private final String[] PUBLIC_URLS = {
+            BffRestApiRoutes.HOTEL_API_HOTEL_CHECK_AVAILABILITY,
+            BffRestApiRoutes.HOTEL_API_HOTEL_GET_ROOM
     };
 
     @Bean
@@ -45,9 +51,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers(ADMIN_URLS).hasAuthority("ADMIN"))
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers(USER_URLS).hasAnyAuthority("USER", "ADMIN"))
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers(PUBLIC_URLS).permitAll();
+                    authorize.requestMatchers(ADMIN_URLS).hasAuthority("ADMIN");
+                    authorize.requestMatchers(USER_URLS).hasAnyAuthority("USER", "ADMIN");
+                    authorize.anyRequest().permitAll();
+                })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -1,7 +1,9 @@
 package com.tinqinacademy.bff.rest.controllers.hotelcontrollers;
 
-import com.tinqinacademy.bff.api.operations.hotelservice.addroom.AddRoomBffInput;
-import com.tinqinacademy.bff.api.operations.hotelservice.addroom.AddRoomBffOperation;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffOperation;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.registervisitors.RegisterVisitorsBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.registervisitors.RegisterVisitorsBffOperation;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.base.BaseController;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +20,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SystemController extends BaseController {
     private final AddRoomBffOperation addRoomBffOperation;
+    private final RegisterVisitorsBffOperation registerVisitorsBffOperation;
+
+
+    @Operation(summary = "Register visitors",
+            description = " This endpoint is registering a list of visitors as a room renters",
+            tags = {"Hotel"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "The visitors have been registered"),
+            @ApiResponse(responseCode = "400", description = "Incorrect data format"),
+            @ApiResponse(responseCode = "404", description = "The booking was not found")
+    })
+    @PostMapping(BffRestApiRoutes.HOTEL_API_SYSTEM_REGISTER_VISITOR)
+    public ResponseEntity<?> registerVisitors(@RequestBody RegisterVisitorsBffInput input) {
+        return handleWithCode(registerVisitorsBffOperation.process(input), HttpStatus.CREATED);
+    }
 
 
 

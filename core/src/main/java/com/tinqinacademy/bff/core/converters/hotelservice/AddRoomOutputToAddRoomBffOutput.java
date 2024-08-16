@@ -1,6 +1,6 @@
 package com.tinqinacademy.bff.core.converters.hotelservice;
 
-import com.tinqinacademy.bff.api.operations.hotelservice.addroom.AddRoomBffOutput;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffOutput;
 import com.tinqinacademy.bff.core.base.BaseConverter;
 
 import com.tinqinacademy.hotel.api.operations.system.addroom.AddRoomOutput;
