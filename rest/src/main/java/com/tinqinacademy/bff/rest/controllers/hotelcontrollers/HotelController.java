@@ -6,6 +6,8 @@ import com.tinqinacademy.bff.api.operations.hotelservice.hotel.bookroom.BookRoom
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.bookroom.BookRoomBffOperation;
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.getroom.GetRoomBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.getroom.GetRoomBffOperation;
+import com.tinqinacademy.bff.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffOperation;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.base.BaseController;
 import com.tinqinacademy.bff.rest.context.UserContext;
@@ -25,6 +27,7 @@ public class HotelController extends BaseController {
     private final AvailableRoomsBffOperation availableRoomsBffOperation;
     private final GetRoomBffOperation getRoomBffOperation;
     private final BookRoomBffOperation bookRoomBffOperation;
+    private final UnbookRoomBffOperation unbookRoomBffOperation;
 
     @Operation(summary = "Check available rooms",
             description = " This endpoint is for checking available rooms by criteria",
@@ -89,5 +92,24 @@ public class HotelController extends BaseController {
                 .userId(userContext.getUserId())
                 .build();
         return handle(bookRoomBffOperation.process(updatedInput));
+    }
+
+
+    @Operation(summary = "Remove booked room",
+            description = " This endpoint is removing the booked status of a room making it available using the bookingId",
+            tags = {"Hotel"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The room was successfully unbooked"),
+            @ApiResponse(responseCode = "400", description = "The bookingId is in the wrong format"),
+            @ApiResponse(responseCode = "404", description = "There is no booked room with this bookingId")
+    })
+    @DeleteMapping(BffRestApiRoutes.HOTEL_API_HOTEL_UNBOOK_ROOM)
+    public ResponseEntity<?> unbookRoom(@PathVariable String bookingId) {
+        UnbookRoomBffInput input = UnbookRoomBffInput
+                .builder()
+                .bookingId(bookingId)
+                .userId(userContext.getUserId())
+                .build();
+        return handle(unbookRoomBffOperation.process(input));
     }
 }

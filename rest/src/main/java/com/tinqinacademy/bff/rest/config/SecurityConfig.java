@@ -26,6 +26,7 @@ public class SecurityConfig {
     private final String[] USER_URLS = {
             BffRestApiRoutes.API_AUTH_CHECK_JWT,
             BffRestApiRoutes.HOTEL_API_HOTEL_BOOK_ROOM,
+            BffRestApiRoutes.HOTEL_API_HOTEL_UNBOOK_ROOM
     };
 
     private final String[] ADMIN_URLS = {
