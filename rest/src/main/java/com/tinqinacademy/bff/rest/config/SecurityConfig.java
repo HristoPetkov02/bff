@@ -31,7 +31,8 @@ public class SecurityConfig {
 
     private final String[] ADMIN_URLS = {
             BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM,
-            BffRestApiRoutes.HOTEL_API_SYSTEM_REGISTER_VISITOR
+            BffRestApiRoutes.HOTEL_API_SYSTEM_REGISTER_VISITOR,
+            BffRestApiRoutes.HOTEL_API_SYSTEM_VISITOR_REPORT
     };
 
     private final String[] PUBLIC_URLS = {
