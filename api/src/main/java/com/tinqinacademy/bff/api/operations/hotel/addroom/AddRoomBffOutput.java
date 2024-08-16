@@ -1,6 +1,6 @@
 package com.tinqinacademy.bff.api.operations.hotel.addroom;
 
-import com.tinqinacademy.bff.api.base.OperationOutput;
+import com.tinqinacademy.bff.api.base.OperationBffOutput;
 import lombok.*;
 
 @Getter
@@ -9,6 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddRoomBffOutput implements OperationOutput {
+public class AddRoomBffOutput implements OperationBffOutput {
     private String id;
 }

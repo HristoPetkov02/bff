@@ -1,6 +1,6 @@
 package com.tinqinacademy.bff.api.operations.hotel.addroom;
 
-import com.tinqinacademy.bff.api.base.OperationInput;
+import com.tinqinacademy.bff.api.base.OperationBffInput;
 import com.tinqinacademy.bff.api.validation.annotations.ValidBathroomType;
 import com.tinqinacademy.bff.api.validation.annotations.ValidBedSize;
 import jakarta.validation.constraints.*;
@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddRoomBffInput implements OperationInput {
+public class AddRoomBffInput implements OperationBffInput {
     @Min(value = 1 , message = "Bed count must be at least 1")
     @Max(value = 10, message = "Bed count must be less than 10")
     private Integer bedCount;

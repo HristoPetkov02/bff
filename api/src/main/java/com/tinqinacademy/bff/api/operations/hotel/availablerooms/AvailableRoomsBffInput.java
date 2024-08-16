@@ -1,6 +1,6 @@
 package com.tinqinacademy.bff.api.operations.hotel.availablerooms;
 
-import com.tinqinacademy.bff.api.base.OperationInput;
+import com.tinqinacademy.bff.api.base.OperationBffInput;
 import com.tinqinacademy.bff.api.validation.annotations.ValidBathroomType;
 import com.tinqinacademy.bff.api.validation.annotations.ValidBedSize;
 import jakarta.validation.constraints.Max;
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AvailableRoomsBffInput implements OperationInput {
+public class AvailableRoomsBffInput implements OperationBffInput {
     @NotNull(message = "Start date is required")
     private LocalDate startDate;
     @NotNull(message = "End date is required")

@@ -1,5 +1,5 @@
 package com.tinqinacademy.bff.api.base;
 
-public interface OperationOutput {
+public interface OperationBffOutput {
     // Marker interface for outputs
 }

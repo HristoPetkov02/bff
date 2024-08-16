@@ -3,7 +3,7 @@ package com.tinqinacademy.bff.api.operations.hotel.getroom;
 
 
 
-import com.tinqinacademy.bff.api.base.OperationOutput;
+import com.tinqinacademy.bff.api.base.OperationBffOutput;
 import com.tinqinacademy.bff.api.model.BathroomType;
 import com.tinqinacademy.bff.api.model.BedSize;
 import lombok.*;
@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetRoomBffOutput implements OperationOutput {
+public class GetRoomBffOutput implements OperationBffOutput {
     private String id;
     private BigDecimal price;
     private Integer floor;

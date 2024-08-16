@@ -2,8 +2,8 @@ package com.tinqinacademy.bff.core.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.tinqinacademy.bff.api.base.OperationInput;
-import com.tinqinacademy.bff.api.base.OperationOutput;
+import com.tinqinacademy.bff.api.base.OperationBffInput;
+import com.tinqinacademy.bff.api.base.OperationBffOutput;
 import com.tinqinacademy.bff.api.interfaces.ErrorHandlerService;
 import com.tinqinacademy.bff.api.model.Error;
 import com.tinqinacademy.bff.api.exceptions.BffValidationException;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-public abstract class BaseOperationProcessor<I extends OperationInput, O extends OperationOutput> {
+public abstract class BaseOperationProcessor<I extends OperationBffInput, O extends OperationBffOutput> {
     protected final ConversionService conversionService;
     protected final ObjectMapper mapper;
     protected final ErrorHandlerService errorHandlerService;
