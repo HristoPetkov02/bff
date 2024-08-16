@@ -1,7 +1,7 @@
 package com.tinqinacademy.bff.rest.controllers.hotelcontrollers;
 
-import com.tinqinacademy.bff.api.operations.hotel.addroom.AddRoomBffInput;
-import com.tinqinacademy.bff.api.operations.hotel.addroom.AddRoomBffOperation;
+import com.tinqinacademy.bff.api.operations.hotelservice.addroom.AddRoomBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.addroom.AddRoomBffOperation;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.base.BaseController;
 import io.swagger.v3.oas.annotations.Operation;

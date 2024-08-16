@@ -1,11 +1,11 @@
 package com.tinqinacademy.bff.rest.controllers.hotelcontrollers;
 
-import com.tinqinacademy.bff.api.operations.hotel.availablerooms.AvailableRoomsBffInput;
-import com.tinqinacademy.bff.api.operations.hotel.availablerooms.AvailableRoomsBffOperation;
-import com.tinqinacademy.bff.api.operations.hotel.bookroom.BookRoomBffInput;
-import com.tinqinacademy.bff.api.operations.hotel.bookroom.BookRoomBffOperation;
-import com.tinqinacademy.bff.api.operations.hotel.getroom.GetRoomBffInput;
-import com.tinqinacademy.bff.api.operations.hotel.getroom.GetRoomBffOperation;
+import com.tinqinacademy.bff.api.operations.hotelservice.hotel.availablerooms.AvailableRoomsBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.hotel.availablerooms.AvailableRoomsBffOperation;
+import com.tinqinacademy.bff.api.operations.hotelservice.hotel.bookroom.BookRoomBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.hotel.bookroom.BookRoomBffOperation;
+import com.tinqinacademy.bff.api.operations.hotelservice.hotel.getroom.GetRoomBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.hotel.getroom.GetRoomBffOperation;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.base.BaseController;
 import com.tinqinacademy.bff.rest.context.UserContext;
@@ -73,7 +73,9 @@ public class HotelController extends BaseController {
 
 
 
-    @Operation(summary = "Book a room", description = " This endpoint is booking a room")
+    @Operation(summary = "Book a room",
+            description = " This endpoint is booking a room",
+            tags = {"Hotel"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully has been booked the room "),
             @ApiResponse(responseCode = "400", description = "The room is unavailable"),

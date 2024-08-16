@@ -1,4 +1,4 @@
-package com.tinqinacademy.bff.api.operations.hotel.addroom;
+package com.tinqinacademy.bff.api.operations.hotelservice.addroom;
 
 import com.tinqinacademy.bff.api.base.OperationBffInput;
 import com.tinqinacademy.bff.api.validation.annotations.ValidBathroomType;

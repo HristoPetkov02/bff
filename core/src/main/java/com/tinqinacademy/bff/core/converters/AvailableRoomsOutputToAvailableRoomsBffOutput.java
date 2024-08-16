@@ -1,6 +1,6 @@
 package com.tinqinacademy.bff.core.converters;
 
-import com.tinqinacademy.bff.api.operations.hotel.availablerooms.AvailableRoomsBffOutput;
+import com.tinqinacademy.bff.api.operations.hotelservice.hotel.availablerooms.AvailableRoomsBffOutput;
 import com.tinqinacademy.bff.core.base.BaseConverter;
 import com.tinqinacademy.hotel.api.operations.availablerooms.AvailableRoomsOutput;
 import lombok.extern.slf4j.Slf4j;

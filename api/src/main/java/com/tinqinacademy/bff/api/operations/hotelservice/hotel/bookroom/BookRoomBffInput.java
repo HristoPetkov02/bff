@@ -1,11 +1,10 @@
-package com.tinqinacademy.bff.api.operations.hotel.bookroom;
+package com.tinqinacademy.bff.api.operations.hotelservice.hotel.bookroom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tinqinacademy.bff.api.base.OperationBffInput;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.validator.constraints.UUID;
 
 import java.time.LocalDate;
 
@@ -17,6 +16,7 @@ import java.time.LocalDate;
 @Builder(toBuilder = true)
 public class BookRoomBffInput implements OperationBffInput {
     @JsonIgnore
+    @UUID(message = "Room ID must be a valid UUID")
     private String roomId;
 
     @NotNull(message = "Start Date must be included")
@@ -26,5 +26,6 @@ public class BookRoomBffInput implements OperationBffInput {
     private LocalDate endDate;
 
     @JsonIgnore
+    @UUID(message = "User ID must be a valid UUID")
     private String userId;
 }
