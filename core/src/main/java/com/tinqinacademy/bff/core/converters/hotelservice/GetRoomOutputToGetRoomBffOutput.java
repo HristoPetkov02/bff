@@ -1,11 +1,12 @@
-package com.tinqinacademy.bff.core.converters;
+package com.tinqinacademy.bff.core.converters.hotelservice;
 
 
 import com.tinqinacademy.bff.api.model.BathroomType;
 import com.tinqinacademy.bff.api.model.BedSize;
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.getroom.GetRoomBffOutput;
 import com.tinqinacademy.bff.core.base.BaseConverter;
-import com.tinqinacademy.hotel.api.operations.getroom.GetRoomOutput;
+
+import com.tinqinacademy.hotel.api.operations.hotel.getroom.GetRoomOutput;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

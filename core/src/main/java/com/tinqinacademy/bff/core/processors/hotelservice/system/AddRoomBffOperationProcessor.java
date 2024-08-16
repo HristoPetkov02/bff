@@ -1,4 +1,4 @@
-package com.tinqinacademy.bff.core.processors;
+package com.tinqinacademy.bff.core.processors.hotelservice.system;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinqinacademy.bff.api.interfaces.ErrorHandlerService;
@@ -7,8 +7,8 @@ import com.tinqinacademy.bff.api.operations.hotelservice.addroom.AddRoomBffInput
 import com.tinqinacademy.bff.api.operations.hotelservice.addroom.AddRoomBffOperation;
 import com.tinqinacademy.bff.api.operations.hotelservice.addroom.AddRoomBffOutput;
 import com.tinqinacademy.bff.core.base.BaseOperationProcessor;
-import com.tinqinacademy.hotel.api.operations.addroom.AddRoomInput;
-import com.tinqinacademy.hotel.api.operations.addroom.AddRoomOutput;
+import com.tinqinacademy.hotel.api.operations.system.addroom.AddRoomInput;
+import com.tinqinacademy.hotel.api.operations.system.addroom.AddRoomOutput;
 import com.tinqinacademy.hotel.restexport.clients.HotelRestExport;
 import io.vavr.control.Either;
 import io.vavr.control.Try;

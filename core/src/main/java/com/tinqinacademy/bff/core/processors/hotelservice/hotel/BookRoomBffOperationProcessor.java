@@ -1,4 +1,4 @@
-package com.tinqinacademy.bff.core.processors;
+package com.tinqinacademy.bff.core.processors.hotelservice.hotel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinqinacademy.bff.api.interfaces.ErrorHandlerService;
@@ -7,8 +7,8 @@ import com.tinqinacademy.bff.api.operations.hotelservice.hotel.bookroom.BookRoom
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.bookroom.BookRoomBffOperation;
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.bookroom.BookRoomBffOutput;
 import com.tinqinacademy.bff.core.base.BaseOperationProcessor;
-import com.tinqinacademy.hotel.api.operations.bookroom.BookRoomInput;
-import com.tinqinacademy.hotel.api.operations.bookroom.BookRoomOutput;
+
+import com.tinqinacademy.hotel.api.operations.hotel.bookroom.BookRoomInput;
 import com.tinqinacademy.hotel.restexport.clients.HotelRestExport;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
@@ -41,7 +41,7 @@ public class BookRoomBffOperationProcessor extends BaseOperationProcessor<BookRo
 
 
         BookRoomInput inputForHotel = conversionService.convert(input, BookRoomInput.class);
-        BookRoomOutput outputFromHotel = hotelRestExport.bookRoom(input.getRoomId(), inputForHotel);
+        hotelRestExport.bookRoom(input.getRoomId(), inputForHotel);
         BookRoomBffOutput output = BookRoomBffOutput.builder().build();
 
 

@@ -1,4 +1,4 @@
-package com.tinqinacademy.bff.core.processors;
+package com.tinqinacademy.bff.core.processors.hotelservice.hotel;
 
 
 
@@ -9,7 +9,7 @@ import com.tinqinacademy.bff.api.operations.hotelservice.hotel.getroom.GetRoomBf
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.getroom.GetRoomBffOperation;
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.getroom.GetRoomBffOutput;
 import com.tinqinacademy.bff.core.base.BaseOperationProcessor;
-import com.tinqinacademy.hotel.api.operations.getroom.GetRoomOutput;
+import com.tinqinacademy.hotel.api.operations.hotel.getroom.GetRoomOutput;
 import com.tinqinacademy.hotel.restexport.clients.HotelRestExport;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
