@@ -2,6 +2,10 @@ package com.tinqinacademy.bff.rest.controllers.hotelcontrollers;
 
 import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffOperation;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.deleteroom.DeleteRoomBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.deleteroom.DeleteRoomBffOperation;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.partiallyupdate.PartiallyUpdateBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.partiallyupdate.PartiallyUpdateBffOperation;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.registervisitors.RegisterVisitorsBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.registervisitors.RegisterVisitorsBffOperation;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.report.ReportBffInput;
@@ -27,6 +31,8 @@ public class SystemController extends BaseController {
     private final RegisterVisitorsBffOperation registerVisitorsBffOperation;
     private final ReportBffOperation reportBffOperation;
     private final UpdateRoomBffOperation updateRoomBffOperation;
+    private final PartiallyUpdateBffOperation partiallyUpdateBffOperation;
+    private final DeleteRoomBffOperation deleteRoomBffOperation;
 
 
     @Operation(summary = "Register visitors",
@@ -109,5 +115,37 @@ public class SystemController extends BaseController {
                 .roomId(roomId)
                 .build();
         return handle(updateRoomBffOperation.process(updatedInput));
+    }
+
+    @Operation(summary = "Update partially room",
+            description = " This endpoint is for updating partially the info of a room",
+            tags = {"Hotel"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The room was successfully updated"),
+            @ApiResponse(responseCode = "400", description = "The roomId is in the wrong format"),
+            @ApiResponse(responseCode = "404", description = "There is no room with this id")
+    })
+    @PatchMapping(value = BffRestApiRoutes.HOTEL_API_SYSTEM_UPDATE_PARTIALLY_ROOM, consumes = "application/json-patch+json")
+    public ResponseEntity<?> partiallyUpdate(@PathVariable String roomId, @RequestBody PartiallyUpdateBffInput input){
+        PartiallyUpdateBffInput updatedInput = input.toBuilder()
+                .roomId(roomId)
+                .build();
+        return handle(partiallyUpdateBffOperation.process(updatedInput));
+    }
+
+    @Operation(summary = "Remove a room",
+            description = " This endpoint is removing a room from the hotel",
+            tags = {"Hotel"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The room was successfully removed"),
+            @ApiResponse(responseCode = "400", description = "The roomId is in the wrong format"),
+            @ApiResponse(responseCode = "404", description = "There is no room with this id")
+    })
+    @DeleteMapping(BffRestApiRoutes.HOTEL_API_SYSTEM_DELETE_ROOM)
+    public ResponseEntity<?> deleteRoom(@PathVariable("roomId") String id) {
+        DeleteRoomBffInput input = DeleteRoomBffInput.builder()
+                .id(id)
+                .build();
+        return handle(deleteRoomBffOperation.process(input));
     }
 }
