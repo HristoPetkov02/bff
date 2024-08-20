@@ -53,6 +53,8 @@ public class SecurityConfig {
         request.requestMatchers(HttpMethod.POST,BffRestApiRoutes.API_AUTH_CHECK_JWT).hasAnyAuthority("USER", "ADMIN");
         request.requestMatchers(HttpMethod.POST,BffRestApiRoutes.HOTEL_API_HOTEL_BOOK_ROOM).hasAnyAuthority("USER", "ADMIN");
         request.requestMatchers(HttpMethod.DELETE,BffRestApiRoutes.HOTEL_API_HOTEL_UNBOOK_ROOM).hasAnyAuthority("USER", "ADMIN");
+        request.requestMatchers(HttpMethod.POST,BffRestApiRoutes.COMMENTS_API_HOTEL_LEAVE_COMMENT).hasAnyAuthority("USER", "ADMIN");
+        request.requestMatchers(HttpMethod.PATCH,BffRestApiRoutes.COMMENTS_API_HOTEL_UPDATE_OWN_COMMENT).hasAnyAuthority("USER", "ADMIN");
     }
 
     private void configureAdminAccess(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry request){
@@ -62,6 +64,8 @@ public class SecurityConfig {
         request.requestMatchers(HttpMethod.PUT,BffRestApiRoutes.HOTEL_API_SYSTEM_UPDATE_ROOM).hasAuthority("ADMIN");
         request.requestMatchers(HttpMethod.PATCH,BffRestApiRoutes.HOTEL_API_SYSTEM_UPDATE_PARTIALLY_ROOM).hasAuthority("ADMIN");
         request.requestMatchers(HttpMethod.DELETE,BffRestApiRoutes.HOTEL_API_SYSTEM_DELETE_ROOM).hasAuthority("ADMIN");
+        request.requestMatchers(HttpMethod.PUT,BffRestApiRoutes.COMMENTS_API_SYSTEM_UPDATE_COMMENT).hasAuthority("ADMIN");
+        request.requestMatchers(HttpMethod.DELETE,BffRestApiRoutes.COMMENTS_API_SYSTEM_DELETE_COMMENT).hasAuthority("ADMIN");
     }
 
 }
