@@ -78,7 +78,7 @@ public class ErrorHandlerServiceImpl implements ErrorHandlerService {
                     .errors(errors)
                     .errorCode(HttpStatus.valueOf(ex.status()))
                     .build();
-        } catch (IOException e) {
+        } catch (Exception e) {
             return ErrorWrapper.builder()
                     .errors(Collections.singletonList(Error.builder().message(ex.getMessage()).build()))
                     .errorCode(HttpStatus.valueOf(ex.status()))
@@ -87,44 +87,4 @@ public class ErrorHandlerServiceImpl implements ErrorHandlerService {
     }
 
 
-    /*private ErrorWrapper handleFeignException(FeignException ex) {
-        String defaultErrorMessage = "Unknown error occurred";
-        List<Error> errorList = new ArrayList<>();
-
-        try {
-            String responseBody = ex.contentUTF8();
-
-            List<Map<String, String>> responseList = objectMapper.readValue(responseBody, List.class);
-
-            if (!responseList.isEmpty()) {
-                Map<String, String> firstError = responseList.get(0);
-
-                // This if is for the case, if there is no field in the error response,
-                // otherwise it will return IllegalArgumentException in the console
-                if (firstError.containsKey("field") && firstError.containsKey("message")) {
-                    for (Map<String, String> errorMap : responseList) {
-                        String field = errorMap.get("field");
-                        String message = errorMap.get("message");
-                        errorList.add(Error.builder()
-                                .field(field)
-                                .message(message)
-                                .build());
-                    }
-                } else if (firstError.containsKey("message")) {
-                    String errMsg = firstError.get("message");
-                    errorList.add(Error.builder().message(errMsg).build());
-                }
-            } else {
-                errorList.add(Error.builder().message(defaultErrorMessage).build());
-            }
-
-        } catch (IOException e) {
-            errorList.add(Error.builder().message(ex.getMessage()).build());
-        }
-
-        return ErrorWrapper.builder()
-                .errors(errorList)
-                .errorCode(HttpStatus.valueOf(ex.status()))
-                .build();
-    }*/
 }

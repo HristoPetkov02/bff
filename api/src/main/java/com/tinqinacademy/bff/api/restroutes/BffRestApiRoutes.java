@@ -22,4 +22,16 @@ public class BffRestApiRoutes {
     public final static String HOTEL_API_SYSTEM_DELETE_ROOM = HOTEL_API_SYSTEM + "/room/{roomId}";
     public final static String HOTEL_API_SYSTEM_UPDATE_ROOM = HOTEL_API_SYSTEM + "/room/{roomId}";
     public final static String HOTEL_API_SYSTEM_UPDATE_PARTIALLY_ROOM = HOTEL_API_SYSTEM + "/room/{roomId}";
+
+    //Comments rest api routes
+    public final static String COMMENTS_API_HOTEL = API + "/hotel";
+    public final static String COMMENTS_API_HOTEL_GET_ROOM_COMMENT = COMMENTS_API_HOTEL +"/{roomId}/comment";
+    public final static String COMMENTS_API_HOTEL_LEAVE_COMMENT = COMMENTS_API_HOTEL +"/{roomId}/comment";
+    public final static String COMMENTS_API_HOTEL_UPDATE_OWN_COMMENT = COMMENTS_API_HOTEL +"/comment/{commentId}";
+
+
+
+    public final static String COMMENTS_API_SYSTEM = API + "/system";
+    public final static String COMMENTS_API_SYSTEM_UPDATE_COMMENT = COMMENTS_API_SYSTEM + "/comment/{commentId}";
+    public final static String COMMENTS_API_SYSTEM_DELETE_COMMENT = COMMENTS_API_SYSTEM + "/system/comment/{commentId}";
 }

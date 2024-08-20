@@ -26,7 +26,8 @@ public class SwaggerConfig {
                         new Components()
                                 .addSecuritySchemes("Bearer Authentication", createAPIKeyScheme()))
                 .info(new Info().title("API Documentation").version("1.0").description("API documentation for the application."))
-                .addTagsItem(new Tag().name("Hotel").description("Operations related to hotel service"));
+                .addTagsItem(new Tag().name("Hotel").description("Operations related to hotel service"))
+                .addTagsItem(new Tag().name("Comments").description("Operations related to comments service"));
     }
 }
 

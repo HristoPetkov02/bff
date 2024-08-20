@@ -45,8 +45,9 @@
 		<spring-cloud-starter-openfeign.version>4.1.3</spring-cloud-starter-openfeign.version>
 		<feign-jackson.version>13.3</feign-jackson.version>
 		<feign-okhttp.version>13.3</feign-okhttp.version>
-		<hotel.rest-export.version>0.1-SNAPSHOT</hotel.rest-export.version>
-		<auth.rest-export.version>0.1-SNAPSHOT</auth.rest-export.version>
+		<hotel.rest-export.version>0.0.1-SNAPSHOT</hotel.rest-export.version>
+		<auth.rest-export.version>0.0.1-SNAPSHOT</auth.rest-export.version>
+		<comments.rest-export.version>0.0.1-SNAPSHOT</comments.rest-export.version>
 		<srping-dotenv.version>2.5.4</srping-dotenv.version>
 	</properties>
 
