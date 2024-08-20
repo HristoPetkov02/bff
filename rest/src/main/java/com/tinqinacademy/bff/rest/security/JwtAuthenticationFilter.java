@@ -38,30 +38,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        ValidateJwtOutput output = authRestExport.validateJwt(authHeader);
         String token = getToken(request);
-        if (token != null && !token.isEmpty() && output.getIsValid()) {
-            try {
-                Map<String, Object> payloadMap = jwtDecoder.decodeJwt(token);
+        if (token != null && !token.isEmpty()) {
+            ValidateJwtOutput output = authRestExport.validateJwt(authHeader);
+            if (output.getIsValid()) {
+                try {
+                    Map<String, Object> payloadMap = jwtDecoder.decodeJwt(token);
 
-                String id = (String) payloadMap.get("sub");
-                String role = (String) payloadMap.get("role");
-                GrantedAuthority authority = new SimpleGrantedAuthority(role);
+                    String id = (String) payloadMap.get("sub");
+                    String role = (String) payloadMap.get("role");
+                    GrantedAuthority authority = new SimpleGrantedAuthority(role);
 
-                CustomAuthenticationToken authenticationToken = new CustomAuthenticationToken(
-                        id, List.of(authority)
-                );
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                userContext.setUserId(id);
-            } catch (Exception e) {
-                filterChain.doFilter(request, response);
-                return;
+                    CustomAuthenticationToken authenticationToken = new CustomAuthenticationToken(
+                            id, List.of(authority)
+                    );
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    userContext.setUserId(id);
+                } catch (Exception e) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
             }
+
+            filterChain.doFilter(request, response);
+
         }
-
-        filterChain.doFilter(request, response);
-
     }
 
     private String getToken(HttpServletRequest request) {
