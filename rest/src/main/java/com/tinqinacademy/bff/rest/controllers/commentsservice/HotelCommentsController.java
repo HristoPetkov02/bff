@@ -5,6 +5,8 @@ import com.tinqinacademy.bff.api.operations.commentsservice.hotel.getcomments.Ge
 import com.tinqinacademy.bff.api.operations.commentsservice.hotel.leavecomment.LeaveCommentBffInput;
 import com.tinqinacademy.bff.api.operations.commentsservice.hotel.leavecomment.LeaveCommentBffOperation;
 import com.tinqinacademy.bff.api.operations.commentsservice.hotel.leavecomment.LeaveCommentBffOutput;
+import com.tinqinacademy.bff.api.operations.commentsservice.hotel.updateowncomment.UpdateOwnCommentBffInput;
+import com.tinqinacademy.bff.api.operations.commentsservice.hotel.updateowncomment.UpdateOwnCommentBffOperation;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.base.BaseController;
 import com.tinqinacademy.bff.rest.context.UserContext;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class HotelCommentsController extends BaseController {
     private final GetRoomCommentsBffOperation getRoomCommentsBffOperation;
     private final LeaveCommentBffOperation leaveCommentBffOperation;
+    private final UpdateOwnCommentBffOperation updateOwnCommentBffOperation;
     private final UserContext userContext;
 
     @Operation(summary = "Get all comments",
@@ -56,5 +59,24 @@ public class HotelCommentsController extends BaseController {
                 .userId(userContext.getUserId())
                 .build();
         return handleWithCode(leaveCommentBffOperation.process(updatedInput), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Update own comment",
+            description = " updates your own comment",
+            tags = {"Comments"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated the comment"),
+            @ApiResponse(responseCode = "400", description = "Wrong commentId format used"),
+            @ApiResponse(responseCode = "404", description = "A comment with this commentId doesn't exist")
+    })
+    @PatchMapping(BffRestApiRoutes.COMMENTS_API_HOTEL_UPDATE_OWN_COMMENT)
+    public ResponseEntity<?> updateOwnComment(
+            @PathVariable String commentId,
+            @RequestBody UpdateOwnCommentBffInput input){
+        UpdateOwnCommentBffInput updatedInput = input.toBuilder()
+                .commentId(commentId)
+                .userId(userContext.getUserId())
+                .build();
+        return handle(updateOwnCommentBffOperation.process(updatedInput));
     }
 }
