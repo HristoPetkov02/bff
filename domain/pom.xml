@@ -12,25 +12,5 @@
 
     <artifactId>domain</artifactId>
     <version>${revision}</version>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.tinqinacademy.hotel</groupId>
-            <artifactId>restexport</artifactId>
-            <version>${hotel.rest-export.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.tinqinacademy.auth</groupId>
-            <artifactId>restexport</artifactId>
-            <version>${auth.rest-export.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.tinqinacademy.comments</groupId>
-            <artifactId>restexport</artifactId>
-            <version>${auth.rest-export.version}</version>
-        </dependency>
-    </dependencies>
     
 </project>
