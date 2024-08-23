@@ -49,6 +49,7 @@
 		<auth.rest-export.version>0.0.1-SNAPSHOT</auth.rest-export.version>
 		<comments.rest-export.version>0.0.1-SNAPSHOT</comments.rest-export.version>
 		<srping-dotenv.version>2.5.4</srping-dotenv.version>
+		<spring-boot-admin-starter-client>3.3.2</spring-boot-admin-starter-client>
 	</properties>
 
 
