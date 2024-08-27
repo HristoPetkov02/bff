@@ -6,6 +6,7 @@ import com.tinqinacademy.auth.restexport.AuthRestExport;
 import com.tinqinacademy.bff.api.model.BffBathroomType;
 import com.tinqinacademy.bff.api.model.BffBedSize;
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.bookroom.BookRoomBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffInput;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.security.JwtDecoder;
 import com.tinqinacademy.comments.restexport.CommentsRestExport;
@@ -15,11 +16,11 @@ import com.tinqinacademy.hotel.api.operations.hotel.availablerooms.AvailableRoom
 import com.tinqinacademy.hotel.api.operations.hotel.bookroom.BookRoomInput;
 import com.tinqinacademy.hotel.api.operations.hotel.bookroom.BookRoomOutput;
 import com.tinqinacademy.hotel.api.operations.hotel.getroom.GetRoomOutput;
+import com.tinqinacademy.hotel.api.operations.hotel.unbookroom.UnbookRoomInput;
+import com.tinqinacademy.hotel.api.operations.hotel.unbookroom.UnbookRoomOutput;
 import com.tinqinacademy.hotel.restexport.clients.HotelRestExport;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,8 +36,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -49,7 +49,6 @@ public class HotelControllerTest {
     private final ObjectMapper objectMapper;
 
 
-
     @MockBean
     private HotelRestExport hotelRestExport;
     @MockBean
@@ -58,7 +57,6 @@ public class HotelControllerTest {
     private AuthRestExport authenticationRestExport;
     @MockBean
     private JwtDecoder jwtDecoder;
-
 
 
     @Autowired
@@ -194,6 +192,80 @@ public class HotelControllerTest {
                         .build());
 
         mvc.perform(post(BffRestApiRoutes.HOTEL_API_HOTEL_BOOK_ROOM, roomId)
+                        .header("Authorization", jwt))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+
+    @Test
+    public void testUnbookRoomOk() throws Exception {
+        String bookingId = UUID.randomUUID().toString();
+        String jwt = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+        UnbookRoomBffInput input = UnbookRoomBffInput.builder()
+                .build();
+
+        UnbookRoomInput bookRoomInput = UnbookRoomInput.builder()
+                .bookingId(bookingId)
+                .userId(userId)
+                .build();
+
+        when(jwtDecoder.decodeJwt(any(jwt.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "USER")
+        );
+        when(authenticationRestExport.validateJwt(jwt)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+        when(hotelRestExport.unbookRoom(bookingId, bookRoomInput))
+                .thenReturn(UnbookRoomOutput.builder().build());
+
+        mvc.perform(delete(BffRestApiRoutes.HOTEL_API_HOTEL_UNBOOK_ROOM, bookingId)
+                        .header("Authorization", jwt)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(input)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testUnbookRoomBadRequest() throws Exception {
+        String bookingId = "not-uuid";
+        String jwt = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+        UnbookRoomBffInput input = UnbookRoomBffInput.builder()
+                .build();
+
+        when(jwtDecoder.decodeJwt(any(jwt.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "USER")
+        );
+        when(authenticationRestExport.validateJwt(jwt)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        mvc.perform(delete(BffRestApiRoutes.HOTEL_API_HOTEL_UNBOOK_ROOM, bookingId)
+                        .header("Authorization", jwt)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(input)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testUnbookRoomUnauthorized() throws Exception {
+        String bookingId = UUID.randomUUID().toString();
+        String jwt = "Bearer mock-jwt-token";
+
+        when(authenticationRestExport.validateJwt(jwt)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(false)
+                        .build());
+
+        mvc.perform(delete(BffRestApiRoutes.HOTEL_API_HOTEL_UNBOOK_ROOM, bookingId)
                         .header("Authorization", jwt))
                 .andExpect(status().isUnauthorized());
     }

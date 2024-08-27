@@ -83,7 +83,8 @@ public class HotelController extends BaseController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successfully has been booked the room "),
             @ApiResponse(responseCode = "400", description = "The room is unavailable"),
-            @ApiResponse(responseCode = "404", description = "The room doesn't exist")
+            @ApiResponse(responseCode = "404", description = "The room doesn't exist"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PostMapping(BffRestApiRoutes.HOTEL_API_HOTEL_BOOK_ROOM)
     public ResponseEntity<?> bookRoom(@PathVariable String roomId,@RequestBody BookRoomBffInput input) {
@@ -102,7 +103,8 @@ public class HotelController extends BaseController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "The room was successfully unbooked"),
             @ApiResponse(responseCode = "400", description = "The bookingId is in the wrong format"),
-            @ApiResponse(responseCode = "404", description = "There is no booked room with this bookingId")
+            @ApiResponse(responseCode = "404", description = "There is no booked room with this bookingId"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @DeleteMapping(BffRestApiRoutes.HOTEL_API_HOTEL_UNBOOK_ROOM)
     public ResponseEntity<?> unbookRoom(@PathVariable String bookingId) {
