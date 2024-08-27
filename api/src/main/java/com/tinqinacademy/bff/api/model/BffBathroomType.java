@@ -3,14 +3,14 @@ package com.tinqinacademy.bff.api.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum BathroomType {
+public enum BffBathroomType {
     PRIVATE("private"),
     SHARED("shared"),
     UNKNOWN("");
 
     private final String code;
 
-    BathroomType(String code) {
+    BffBathroomType(String code) {
         this.code = code;
     }
 
@@ -20,10 +20,10 @@ public enum BathroomType {
     }
 
     @JsonCreator
-    public static BathroomType getByCode(String code){
-        for (BathroomType bathroomType : BathroomType.values()) {
-            if (bathroomType.code.equals(code)) {
-                return bathroomType;
+    public static BffBathroomType getByCode(String code){
+        for (BffBathroomType bffBathroomType : BffBathroomType.values()) {
+            if (bffBathroomType.code.equals(code)) {
+                return bffBathroomType;
             }
         }
         return UNKNOWN;

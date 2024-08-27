@@ -1,4 +1,4 @@
-package com.tinqinacademy.bff.rest.controllers.hotelcontrollers;
+package com.tinqinacademy.bff.rest.controllers.hotelsystem;
 
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.availablerooms.AvailableRoomsBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.availablerooms.AvailableRoomsBffOperation;
@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,7 +81,7 @@ public class HotelController extends BaseController {
             description = " This endpoint is booking a room",
             tags = {"Hotel"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully has been booked the room "),
+            @ApiResponse(responseCode = "201", description = "Successfully has been booked the room "),
             @ApiResponse(responseCode = "400", description = "The room is unavailable"),
             @ApiResponse(responseCode = "404", description = "The room doesn't exist")
     })
@@ -91,7 +92,7 @@ public class HotelController extends BaseController {
                 .roomId(roomId)
                 .userId(userContext.getUserId())
                 .build();
-        return handle(bookRoomBffOperation.process(updatedInput));
+        return handleWithCode(bookRoomBffOperation.process(updatedInput), HttpStatus.CREATED);
     }
 
 

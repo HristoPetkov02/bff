@@ -3,7 +3,7 @@ package com.tinqinacademy.bff.api.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum BedSize {
+public enum BffBedSize {
     KING_SIZED("kingSized"),
     QUEEN_SIZED("queenSized"),
     DOUBLE("double"),
@@ -14,15 +14,15 @@ public enum BedSize {
 
     private final String code;
 
-    BedSize(String code) {
+    BffBedSize(String code) {
         this.code = code;
     }
 
     @JsonCreator
-    public static BedSize getByCode(String code){
-        for (BedSize bedSize : BedSize.values()) {
-            if (bedSize.code.equals(code)) {
-                return bedSize;
+    public static BffBedSize getByCode(String code){
+        for (BffBedSize bffBedSize : BffBedSize.values()) {
+            if (bffBedSize.code.equals(code)) {
+                return bffBedSize;
             }
         }
         return UNKNOWN;

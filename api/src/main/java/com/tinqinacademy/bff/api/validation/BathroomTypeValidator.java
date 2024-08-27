@@ -1,7 +1,7 @@
 package com.tinqinacademy.bff.api.validation;
 
 
-import com.tinqinacademy.bff.api.model.BathroomType;
+import com.tinqinacademy.bff.api.model.BffBathroomType;
 import com.tinqinacademy.bff.api.validation.annotations.ValidBathroomType;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -20,8 +20,8 @@ public class BathroomTypeValidator implements ConstraintValidator<ValidBathroomT
             return true;
         }
 
-        for (BathroomType bathroomType : BathroomType.values()) {
-            if (!bathroomType.toString().isEmpty() && bathroomType.toString().equals(s)) {
+        for (BffBathroomType bffBathroomType : BffBathroomType.values()) {
+            if (!bffBathroomType.toString().isEmpty() && bffBathroomType.toString().equals(s)) {
                 return true;
             }
         }

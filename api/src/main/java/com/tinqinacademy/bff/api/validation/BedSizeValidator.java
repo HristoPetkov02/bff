@@ -1,7 +1,7 @@
 package com.tinqinacademy.bff.api.validation;
 
 
-import com.tinqinacademy.bff.api.model.BedSize;
+import com.tinqinacademy.bff.api.model.BffBedSize;
 import com.tinqinacademy.bff.api.validation.annotations.ValidBedSize;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -18,8 +18,8 @@ public class BedSizeValidator implements ConstraintValidator<ValidBedSize, Strin
             return true;
         }
 
-        for (BedSize bedSize : BedSize.values()) {
-            if (!bedSize.toString().isEmpty() && bedSize.toString().equals(s)) {
+        for (BffBedSize bffBedSize : BffBedSize.values()) {
+            if (!bffBedSize.toString().isEmpty() && bffBedSize.toString().equals(s)) {
                 return true;
             }
         }
