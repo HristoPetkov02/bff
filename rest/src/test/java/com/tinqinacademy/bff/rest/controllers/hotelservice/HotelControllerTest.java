@@ -1,4 +1,4 @@
-package com.tinqinacademy.bff.rest.controllers.hotelsystem;
+package com.tinqinacademy.bff.rest.controllers.hotelservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinqinacademy.auth.api.operations.validatejwt.ValidateJwtOutput;
@@ -9,7 +9,6 @@ import com.tinqinacademy.bff.api.operations.hotelservice.hotel.bookroom.BookRoom
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.unbookroom.UnbookRoomBffInput;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.security.JwtDecoder;
-import com.tinqinacademy.comments.restexport.CommentsRestExport;
 import com.tinqinacademy.hotel.api.model.BathroomType;
 import com.tinqinacademy.hotel.api.model.BedSize;
 import com.tinqinacademy.hotel.api.operations.hotel.availablerooms.AvailableRoomsOutput;
