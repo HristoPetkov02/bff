@@ -52,8 +52,6 @@ public class HotelControllerTest {
     @MockBean
     private HotelRestExport hotelRestExport;
     @MockBean
-    private CommentsRestExport commentsRestExport;
-    @MockBean
     private AuthRestExport authenticationRestExport;
     @MockBean
     private JwtDecoder jwtDecoder;
