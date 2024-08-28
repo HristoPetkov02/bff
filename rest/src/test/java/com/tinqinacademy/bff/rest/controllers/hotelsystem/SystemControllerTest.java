@@ -3,10 +3,16 @@ package com.tinqinacademy.bff.rest.controllers.hotelsystem;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinqinacademy.auth.api.operations.validatejwt.ValidateJwtOutput;
 import com.tinqinacademy.auth.restexport.AuthRestExport;
+import com.tinqinacademy.bff.api.model.BffBathroomType;
+import com.tinqinacademy.bff.api.model.BffBedSize;
 import com.tinqinacademy.bff.api.model.input.VisitorRegisterBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffOutput;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.registervisitors.RegisterVisitorsBffInput;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.security.JwtDecoder;
+import com.tinqinacademy.hotel.api.operations.system.addroom.AddRoomInput;
+import com.tinqinacademy.hotel.api.operations.system.addroom.AddRoomOutput;
 import com.tinqinacademy.hotel.api.operations.system.registervisitors.RegisterVisitorsInput;
 import com.tinqinacademy.hotel.api.operations.system.registervisitors.RegisterVisitorsOutput;
 import com.tinqinacademy.hotel.restexport.clients.HotelRestExport;
@@ -19,6 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -189,6 +196,111 @@ public class SystemControllerTest {
                 .header("Authorization", jwtToken)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(RegisterVisitorsBffInput.builder().build())))
+                .andExpect(status().isForbidden());
+    }
+
+
+
+    @Test
+    public void testAddRoomCreated() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        AddRoomBffInput input = AddRoomBffInput.builder()
+                .roomNo("101")
+                .bedCount(1)
+                .bedSizes(List.of(BffBedSize.DOUBLE.toString()))
+                .bathroomType(BffBathroomType.PRIVATE.toString())
+                .floor(1)
+                .price(BigDecimal.valueOf(111))
+                .build();
+
+        AddRoomInput addRoomInput = AddRoomInput.builder().build();
+
+        when(hotelRestExport.addRoom(addRoomInput))
+                .thenReturn(AddRoomOutput.builder()
+                        .id(UUID.randomUUID().toString())
+                        .build());
+
+        mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM)
+                .header("Authorization", jwtToken)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(input)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testAddRoomBadRequest() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        AddRoomBffInput input = AddRoomBffInput.builder()
+                .floor(1)
+                .price(BigDecimal.valueOf(111))
+                .build();
+
+        mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM)
+                .header("Authorization", jwtToken)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(input)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testAddRoomUnauthorized() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(false)
+                        .build());
+
+        mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM)
+                .header("Authorization", jwtToken)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(AddRoomBffInput.builder().build())))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void testAddRoomForbidden() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "USER")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM)
+                .header("Authorization", jwtToken)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(AddRoomBffInput.builder().build())))
                 .andExpect(status().isForbidden());
     }
 
