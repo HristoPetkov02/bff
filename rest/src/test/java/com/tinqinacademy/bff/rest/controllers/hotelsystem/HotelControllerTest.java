@@ -103,6 +103,7 @@ public class HotelControllerTest {
     }
 
 
+
     @Test
     public void testGetRoomOk() throws Exception {
         String roomId = UUID.randomUUID().toString();
@@ -125,6 +126,8 @@ public class HotelControllerTest {
         mvc.perform(get(BffRestApiRoutes.HOTEL_API_HOTEL_GET_ROOM, "not-uuid"))
                 .andExpect(status().isBadRequest());
     }
+
+
 
     @Test
     public void testBookRoomCreated() throws Exception {
