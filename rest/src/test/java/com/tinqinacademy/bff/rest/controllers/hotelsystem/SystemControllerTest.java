@@ -7,14 +7,16 @@ import com.tinqinacademy.bff.api.model.BffBathroomType;
 import com.tinqinacademy.bff.api.model.BffBedSize;
 import com.tinqinacademy.bff.api.model.input.VisitorRegisterBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffInput;
-import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffOutput;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.registervisitors.RegisterVisitorsBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.report.ReportBffInput;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.security.JwtDecoder;
+import com.tinqinacademy.hotel.api.model.output.VisitorReportOutput;
 import com.tinqinacademy.hotel.api.operations.system.addroom.AddRoomInput;
 import com.tinqinacademy.hotel.api.operations.system.addroom.AddRoomOutput;
 import com.tinqinacademy.hotel.api.operations.system.registervisitors.RegisterVisitorsInput;
 import com.tinqinacademy.hotel.api.operations.system.registervisitors.RegisterVisitorsOutput;
+import com.tinqinacademy.hotel.api.operations.system.report.ReportOutput;
 import com.tinqinacademy.hotel.restexport.clients.HotelRestExport;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +35,8 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -56,7 +59,6 @@ public class SystemControllerTest {
         this.mvc = mvc;
         this.objectMapper = objectMapper;
     }
-
 
 
     @Test
@@ -111,9 +113,9 @@ public class SystemControllerTest {
 
 
         mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_REGISTER_VISITOR)
-                .header("Authorization", jwtToken)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(input)))
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(input)))
                 .andExpect(status().isCreated());
     }
 
@@ -145,9 +147,9 @@ public class SystemControllerTest {
                 .build();
 
         mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_REGISTER_VISITOR)
-                .header("Authorization", jwtToken)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(input)))
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(input)))
                 .andExpect(status().isBadRequest());
 
         input = RegisterVisitorsBffInput.builder()
@@ -155,9 +157,9 @@ public class SystemControllerTest {
                 .build();
 
         mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_REGISTER_VISITOR)
-                .header("Authorization", jwtToken)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(input)))
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(input)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -171,9 +173,9 @@ public class SystemControllerTest {
                         .build());
 
         mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_REGISTER_VISITOR)
-                .header("Authorization", jwtToken)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(RegisterVisitorsBffInput.builder().build())))
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(RegisterVisitorsBffInput.builder().build())))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -193,12 +195,11 @@ public class SystemControllerTest {
                         .build());
 
         mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_REGISTER_VISITOR)
-                .header("Authorization", jwtToken)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(RegisterVisitorsBffInput.builder().build())))
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(RegisterVisitorsBffInput.builder().build())))
                 .andExpect(status().isForbidden());
     }
-
 
 
     @Test
@@ -233,9 +234,9 @@ public class SystemControllerTest {
                         .build());
 
         mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM)
-                .header("Authorization", jwtToken)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(input)))
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(input)))
                 .andExpect(status().isCreated());
     }
 
@@ -260,9 +261,9 @@ public class SystemControllerTest {
                 .build();
 
         mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM)
-                .header("Authorization", jwtToken)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(input)))
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(input)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -276,9 +277,9 @@ public class SystemControllerTest {
                         .build());
 
         mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM)
-                .header("Authorization", jwtToken)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(AddRoomBffInput.builder().build())))
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(AddRoomBffInput.builder().build())))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -298,9 +299,133 @@ public class SystemControllerTest {
                         .build());
 
         mvc.perform(post(BffRestApiRoutes.HOTEL_API_SYSTEM_ADD_ROOM)
-                .header("Authorization", jwtToken)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(AddRoomBffInput.builder().build())))
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(AddRoomBffInput.builder().build())))
+                .andExpect(status().isForbidden());
+    }
+
+
+    @Test
+    public void testSearchByCriteriaOk() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        when(hotelRestExport.reportByCriteria(
+                LocalDate.now(),
+                LocalDate.now().plusDays(6),
+                "John",
+                "Doe",
+                "123456789",
+                "123456789",
+                LocalDate.now().plusYears(10),
+                "Athority",
+                LocalDate.now(),
+                "101"))
+                .thenReturn(ReportOutput.builder()
+                        .visitors(List.of(
+                                VisitorReportOutput.builder()
+                                        .startDate(LocalDate.now())
+                                        .endDate(LocalDate.now().plusDays(6))
+                                        .firstName("John")
+                                        .lastName("Doe")
+                                        .phoneNo("123456789")
+                                        .idCardNo("123456789")
+                                        .idCardValidity(LocalDate.now().plusYears(10))
+                                        .idCardIssueAthority("Athority")
+                                        .idCardIssueDate(LocalDate.now())
+                                        .roomNo("101")
+                                        .build()
+                        ))
+                        .build()
+                );
+
+        mvc.perform(get(BffRestApiRoutes.HOTEL_API_SYSTEM_VISITOR_REPORT)
+                        .header("Authorization", jwtToken)
+                        .param("startDate", LocalDate.now().toString())
+                        .param("endDate", LocalDate.now().plusDays(6).toString())
+                        .param("firstName", "John")
+                        .param("lastName", "Doe")
+                        .param("phoneNo", "123456789")
+                        .param("idCardNo", "123456789")
+                        .param("idCardValidity", LocalDate.now().plusYears(10).toString())
+                        .param("idCardIssueAthority", "Athority")
+                        .param("idCardIssueDate", LocalDate.now().toString())
+                        .param("roomNo", "101")
+                        .contentType("application/json"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testSearchByCriteriaBadRequest() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        mvc.perform(get(BffRestApiRoutes.HOTEL_API_SYSTEM_VISITOR_REPORT)
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testSearchByCriteriaUnauthorized() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(false)
+                        .build());
+
+        mvc.perform(get(BffRestApiRoutes.HOTEL_API_SYSTEM_VISITOR_REPORT)
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void testSearchByCriteriaForbidden() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "USER")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        mvc.perform(get(BffRestApiRoutes.HOTEL_API_SYSTEM_VISITOR_REPORT)
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json"))
                 .andExpect(status().isForbidden());
     }
 
