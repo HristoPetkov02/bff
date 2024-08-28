@@ -16,6 +16,7 @@ import com.tinqinacademy.bff.rest.security.JwtDecoder;
 import com.tinqinacademy.hotel.api.model.output.VisitorReportOutput;
 import com.tinqinacademy.hotel.api.operations.system.addroom.AddRoomInput;
 import com.tinqinacademy.hotel.api.operations.system.addroom.AddRoomOutput;
+import com.tinqinacademy.hotel.api.operations.system.deleteroom.DeleteRoomOutput;
 import com.tinqinacademy.hotel.api.operations.system.partiallyupdate.PartiallyUpdateInput;
 import com.tinqinacademy.hotel.api.operations.system.partiallyupdate.PartiallyUpdateOutput;
 import com.tinqinacademy.hotel.api.operations.system.registervisitors.RegisterVisitorsInput;
@@ -207,6 +208,7 @@ public class SystemControllerTest {
     }
 
 
+
     @Test
     public void testAddRoomCreated() throws Exception {
         String jwtToken = "Bearer mock-jwt-token";
@@ -309,6 +311,7 @@ public class SystemControllerTest {
                         .content(objectMapper.writeValueAsString(AddRoomBffInput.builder().build())))
                 .andExpect(status().isForbidden());
     }
+
 
 
     @Test
@@ -658,6 +661,96 @@ public class SystemControllerTest {
                         .header("Authorization", jwtToken)
                         .contentType("application/json-patch+json")
                         .content(objectMapper.writeValueAsString(PartiallyUpdateBffInput.builder().build())))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+
+    @Test
+    public void testDeleteRoomOk() throws Exception{
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        when(hotelRestExport.deleteRoom(UUID.randomUUID().toString()))
+                .thenReturn(DeleteRoomOutput.builder().build());
+
+        mvc.perform(delete(BffRestApiRoutes.HOTEL_API_SYSTEM_DELETE_ROOM, UUID.randomUUID().toString())
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testDeleteRoomBadRequest() throws Exception{
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        when(hotelRestExport.deleteRoom(UUID.randomUUID().toString()))
+                .thenReturn(DeleteRoomOutput.builder().build());
+
+        mvc.perform(delete(BffRestApiRoutes.HOTEL_API_SYSTEM_DELETE_ROOM, "not-uuid")
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testDeleteRoomUnauthorized() throws Exception{
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(false)
+                        .build());
+
+        mvc.perform(delete(BffRestApiRoutes.HOTEL_API_SYSTEM_DELETE_ROOM, "not-uuid")
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void testDeleteRoomForbidden() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "USER")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(false)
+                        .build());
+
+        mvc.perform(delete(BffRestApiRoutes.HOTEL_API_SYSTEM_DELETE_ROOM, "not-uuid")
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json"))
                 .andExpect(status().isUnauthorized());
     }
 }
