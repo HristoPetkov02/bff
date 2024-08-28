@@ -7,6 +7,7 @@ import com.tinqinacademy.bff.api.model.BffBathroomType;
 import com.tinqinacademy.bff.api.model.BffBedSize;
 import com.tinqinacademy.bff.api.model.input.VisitorRegisterBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffInput;
+import com.tinqinacademy.bff.api.operations.hotelservice.system.partiallyupdate.PartiallyUpdateBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.registervisitors.RegisterVisitorsBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.report.ReportBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.updateroom.UpdateRoomBffInput;
@@ -15,6 +16,8 @@ import com.tinqinacademy.bff.rest.security.JwtDecoder;
 import com.tinqinacademy.hotel.api.model.output.VisitorReportOutput;
 import com.tinqinacademy.hotel.api.operations.system.addroom.AddRoomInput;
 import com.tinqinacademy.hotel.api.operations.system.addroom.AddRoomOutput;
+import com.tinqinacademy.hotel.api.operations.system.partiallyupdate.PartiallyUpdateInput;
+import com.tinqinacademy.hotel.api.operations.system.partiallyupdate.PartiallyUpdateOutput;
 import com.tinqinacademy.hotel.api.operations.system.registervisitors.RegisterVisitorsInput;
 import com.tinqinacademy.hotel.api.operations.system.registervisitors.RegisterVisitorsOutput;
 import com.tinqinacademy.hotel.api.operations.system.report.ReportOutput;
@@ -540,5 +543,121 @@ public class SystemControllerTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(UpdateRoomBffInput.builder().build())))
                 .andExpect(status().isForbidden());
+    }
+
+
+
+    @Test
+    public void testPartiallyUpdateRoomOk() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+
+        PartiallyUpdateBffInput input = PartiallyUpdateBffInput.builder()
+                .roomNo("101")
+                .bedCount(1)
+                .build();
+
+        when(hotelRestExport.partiallyUpdate("101", PartiallyUpdateInput.builder().build()))
+                .thenReturn(PartiallyUpdateOutput.builder()
+                        .id(UUID.randomUUID().toString())
+                        .build());
+
+        mvc.perform(patch(BffRestApiRoutes.HOTEL_API_SYSTEM_UPDATE_PARTIALLY_ROOM, UUID.randomUUID().toString())
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json-patch+json")
+                        .content(objectMapper.writeValueAsString(input)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testPartiallyUpdateRoomBadRequest() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+
+        PartiallyUpdateBffInput input = PartiallyUpdateBffInput.builder()
+                .roomNo("101")
+                .bedCount(1)
+                .build();
+
+        when(hotelRestExport.partiallyUpdate("101", PartiallyUpdateInput.builder().build()))
+                .thenReturn(PartiallyUpdateOutput.builder()
+                        .id(UUID.randomUUID().toString())
+                        .build());
+
+        mvc.perform(patch(BffRestApiRoutes.HOTEL_API_SYSTEM_UPDATE_PARTIALLY_ROOM, "not-uuid")
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json-patch+json")
+                        .content(objectMapper.writeValueAsString(input)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testPartiallyUpdateRoomUnauthorized() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(false)
+                        .build());
+
+
+
+        mvc.perform(patch(BffRestApiRoutes.HOTEL_API_SYSTEM_UPDATE_PARTIALLY_ROOM, "not-uuid")
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json-patch+json")
+                        .content(objectMapper.writeValueAsString(PartiallyUpdateBffInput.builder().build())))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void testPartiallyUpdateRoomForbidden() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "USER")
+        );
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(false)
+                        .build());
+
+
+
+        mvc.perform(patch(BffRestApiRoutes.HOTEL_API_SYSTEM_UPDATE_PARTIALLY_ROOM, "not-uuid")
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json-patch+json")
+                        .content(objectMapper.writeValueAsString(PartiallyUpdateBffInput.builder().build())))
+                .andExpect(status().isUnauthorized());
     }
 }
