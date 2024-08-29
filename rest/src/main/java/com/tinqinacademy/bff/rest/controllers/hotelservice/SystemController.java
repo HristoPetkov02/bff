@@ -1,4 +1,4 @@
-package com.tinqinacademy.bff.rest.controllers.hotelcontrollers;
+package com.tinqinacademy.bff.rest.controllers.hotelservice;
 
 import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.system.addroom.AddRoomBffOperation;

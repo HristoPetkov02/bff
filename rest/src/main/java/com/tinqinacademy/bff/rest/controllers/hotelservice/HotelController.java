@@ -1,4 +1,4 @@
-package com.tinqinacademy.bff.rest.controllers.hotelcontrollers;
+package com.tinqinacademy.bff.rest.controllers.hotelservice;
 
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.availablerooms.AvailableRoomsBffInput;
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.availablerooms.AvailableRoomsBffOperation;
@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,9 +81,10 @@ public class HotelController extends BaseController {
             description = " This endpoint is booking a room",
             tags = {"Hotel"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully has been booked the room "),
+            @ApiResponse(responseCode = "201", description = "Successfully has been booked the room "),
             @ApiResponse(responseCode = "400", description = "The room is unavailable"),
-            @ApiResponse(responseCode = "404", description = "The room doesn't exist")
+            @ApiResponse(responseCode = "404", description = "The room doesn't exist"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PostMapping(BffRestApiRoutes.HOTEL_API_HOTEL_BOOK_ROOM)
     public ResponseEntity<?> bookRoom(@PathVariable String roomId,@RequestBody BookRoomBffInput input) {
@@ -91,7 +93,7 @@ public class HotelController extends BaseController {
                 .roomId(roomId)
                 .userId(userContext.getUserId())
                 .build();
-        return handle(bookRoomBffOperation.process(updatedInput));
+        return handleWithCode(bookRoomBffOperation.process(updatedInput), HttpStatus.CREATED);
     }
 
 
@@ -101,7 +103,8 @@ public class HotelController extends BaseController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "The room was successfully unbooked"),
             @ApiResponse(responseCode = "400", description = "The bookingId is in the wrong format"),
-            @ApiResponse(responseCode = "404", description = "There is no booked room with this bookingId")
+            @ApiResponse(responseCode = "404", description = "There is no booked room with this bookingId"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @DeleteMapping(BffRestApiRoutes.HOTEL_API_HOTEL_UNBOOK_ROOM)
     public ResponseEntity<?> unbookRoom(@PathVariable String bookingId) {

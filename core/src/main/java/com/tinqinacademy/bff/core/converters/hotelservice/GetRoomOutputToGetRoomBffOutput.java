@@ -1,8 +1,8 @@
 package com.tinqinacademy.bff.core.converters.hotelservice;
 
 
-import com.tinqinacademy.bff.api.model.BathroomType;
-import com.tinqinacademy.bff.api.model.BedSize;
+import com.tinqinacademy.bff.api.model.BffBathroomType;
+import com.tinqinacademy.bff.api.model.BffBedSize;
 import com.tinqinacademy.bff.api.operations.hotelservice.hotel.getroom.GetRoomBffOutput;
 import com.tinqinacademy.bff.core.base.BaseConverter;
 
@@ -20,11 +20,11 @@ public class GetRoomOutputToGetRoomBffOutput extends BaseConverter<GetRoomOutput
                 .price(input.getPrice())
                 .floor(input.getFloor())
                 .bedCount(input.getBedCount())
-                .bathroomType(BathroomType.getByCode(input.getBathroomType().toString()))
+                .bffBathroomType(BffBathroomType.getByCode(input.getBathroomType().toString()))
                 .datesOccupied(input.getDatesOccupied())
-                .bedSizes(
+                .bffBedSizes(
                         input.getBedSizes().stream()
-                                .map(bedSize -> BedSize.getByCode(bedSize.toString()))
+                                .map(bedSize -> BffBedSize.getByCode(bedSize.toString()))
                                 .toList()
                 )
                 .build();
