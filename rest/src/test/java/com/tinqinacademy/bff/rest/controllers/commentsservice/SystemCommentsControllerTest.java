@@ -7,6 +7,7 @@ import com.tinqinacademy.bff.api.operations.commentsservice.system.updatecomment
 import com.tinqinacademy.bff.api.operations.commentsservice.system.updatecomment.UpdateCommentBffOutput;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.security.JwtDecoder;
+import com.tinqinacademy.comments.api.operations.system.deletecomment.DeleteCommentOutput;
 import com.tinqinacademy.comments.api.operations.system.updatecomment.UpdateCommentInput;
 import com.tinqinacademy.comments.api.operations.system.updatecomment.UpdateCommentOutput;
 import com.tinqinacademy.comments.restexport.CommentsRestExport;
@@ -27,6 +28,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -174,13 +176,109 @@ public class SystemCommentsControllerTest {
 
         when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
                 ValidateJwtOutput.builder()
-                        .isValid(false)
+                        .isValid(true)
                         .build());
 
         mvc.perform(put(BffRestApiRoutes.COMMENTS_API_SYSTEM_UPDATE_COMMENT, UUID.randomUUID().toString())
                         .header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(UpdateCommentBffInput.builder().build())))
+                .andExpect(status().isForbidden());
+    }
+
+
+
+    @Test
+    public void testDeleteCommentOk() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        when(commentsRestExport.deleteComment(UUID.randomUUID().toString()))
+                .thenReturn(DeleteCommentOutput.builder()
+                        .build());
+
+        mvc.perform(delete(BffRestApiRoutes.COMMENTS_API_SYSTEM_DELETE_COMMENT, UUID.randomUUID().toString())
+                .header("Authorization", jwtToken)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+
+
+    @Test
+    public void testDeleteCommentBadRequest() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        mvc.perform(delete(BffRestApiRoutes.COMMENTS_API_SYSTEM_DELETE_COMMENT, "not-a-uuid")
+                        .header("Authorization", jwtToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testDeleteCommentUnauthorized() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "ADMIN")
+        );
+
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(false)
+                        .build());
+
+        mvc.perform(delete(BffRestApiRoutes.COMMENTS_API_SYSTEM_DELETE_COMMENT, "not-a-uuid")
+                        .header("Authorization", jwtToken)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void testDeleteCommentForbidden() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "USER")
+        );
+
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        mvc.perform(delete(BffRestApiRoutes.COMMENTS_API_SYSTEM_DELETE_COMMENT, "not-a-uuid")
+                        .header("Authorization", jwtToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
     }
 }
