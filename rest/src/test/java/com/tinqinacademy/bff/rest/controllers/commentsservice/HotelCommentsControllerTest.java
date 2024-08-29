@@ -3,13 +3,15 @@ package com.tinqinacademy.bff.rest.controllers.commentsservice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinqinacademy.auth.api.operations.validatejwt.ValidateJwtOutput;
 import com.tinqinacademy.auth.restexport.AuthRestExport;
+import com.tinqinacademy.bff.api.operations.commentsservice.hotel.updateowncomment.UpdateOwnCommentBffInput;
 import com.tinqinacademy.bff.api.restroutes.BffRestApiRoutes;
 import com.tinqinacademy.bff.rest.security.JwtDecoder;
 import com.tinqinacademy.comments.api.models.output.GetCommentOutput;
-import com.tinqinacademy.comments.api.operations.hotel.getcomments.GetRoomCommentsInput;
 import com.tinqinacademy.comments.api.operations.hotel.getcomments.GetRoomCommentsOutput;
 import com.tinqinacademy.comments.api.operations.hotel.leavecomment.LeaveCommentInput;
 import com.tinqinacademy.comments.api.operations.hotel.leavecomment.LeaveCommentOutput;
+import com.tinqinacademy.comments.api.operations.hotel.updateowncomment.UpdateOwnCommentInput;
+import com.tinqinacademy.comments.api.operations.hotel.updateowncomment.UpdateOwnCommentOutput;
 import com.tinqinacademy.comments.restexport.CommentsRestExport;
 import com.tinqinacademy.hotel.api.operations.hotel.getroom.GetRoomOutput;
 import com.tinqinacademy.hotel.restexport.clients.HotelRestExport;
@@ -29,8 +31,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -57,7 +58,7 @@ public class HotelCommentsControllerTest {
 
 
     @Test
-    public void getRoomCommentsOk() throws Exception {
+    public void testGetRoomCommentsOk() throws Exception {
         when(hotelRestExport.getRoom(any(String.class)))
                 .thenReturn(GetRoomOutput.builder().build());
 
@@ -80,7 +81,7 @@ public class HotelCommentsControllerTest {
     }
 
     @Test
-    public void getRoomCommentsBadRequest() throws Exception {
+    public void testGetRoomCommentsBadRequest() throws Exception {
         mvc.perform(get(BffRestApiRoutes.COMMENTS_API_HOTEL_GET_ROOM_COMMENT, "not-uuid"))
                 .andExpect(status().isBadRequest());
     }
@@ -88,7 +89,7 @@ public class HotelCommentsControllerTest {
 
 
     @Test
-    public void leaveCommentCreated() throws Exception {
+    public void testLeaveCommentCreated() throws Exception {
         String jwtToken = "Bearer mock-jwt-token";
         String userId = UUID.randomUUID().toString();
 
@@ -108,24 +109,24 @@ public class HotelCommentsControllerTest {
                 .thenReturn(GetRoomOutput.builder().build());
 
         when(commentsRestExport.leaveComment(UUID.randomUUID().toString(), LeaveCommentInput.builder()
-                        .content("comment")
-                        .userId(UUID.randomUUID().toString())
-                        .build())
-                )
+                .content("comment")
+                .userId(UUID.randomUUID().toString())
+                .build())
+        )
                 .thenReturn(LeaveCommentOutput.builder()
                         .id(UUID.randomUUID().toString())
                         .build());
         mvc.perform(post(BffRestApiRoutes.COMMENTS_API_HOTEL_LEAVE_COMMENT, UUID.randomUUID().toString())
-                .header("Authorization", jwtToken)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(LeaveCommentInput.builder()
-                        .content("comment")
-                        .build())))
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(LeaveCommentInput.builder()
+                                .content("comment")
+                                .build())))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    public void leaveCommentBadRequest() throws Exception {
+    public void testLeaveCommentBadRequest() throws Exception {
         String jwtToken = "Bearer mock-jwt-token";
         String userId = UUID.randomUUID().toString();
 
@@ -141,12 +142,12 @@ public class HotelCommentsControllerTest {
                         .build());
 
         mvc.perform(post(BffRestApiRoutes.COMMENTS_API_HOTEL_LEAVE_COMMENT, "not-uuid")
-                .header("Authorization", jwtToken))
+                        .header("Authorization", jwtToken))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void leaveCommentUnauthorized() throws Exception {
+    public void testLeaveCommentUnauthorized() throws Exception {
         String jwtToken = "Bearer mock-jwt-token";
         String userId = UUID.randomUUID().toString();
 
@@ -162,7 +163,95 @@ public class HotelCommentsControllerTest {
                         .build());
 
         mvc.perform(post(BffRestApiRoutes.COMMENTS_API_HOTEL_LEAVE_COMMENT, "not-uuid")
-                .header("Authorization", jwtToken))
+                        .header("Authorization", jwtToken))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+
+    @Test
+    public void testUpdateOwnCommentOk() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "USER")
+        );
+
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        UpdateOwnCommentBffInput input = UpdateOwnCommentBffInput.builder()
+                .content("content")
+                .build();
+
+        when(commentsRestExport.updateOwnComment(
+                UUID.randomUUID().toString(),
+                UpdateOwnCommentInput.builder()
+                        .content("content")
+                        .build()))
+                .thenReturn(UpdateOwnCommentOutput.builder()
+                        .id(UUID.randomUUID().toString())
+                        .build());
+
+        mvc.perform(patch(BffRestApiRoutes.COMMENTS_API_HOTEL_UPDATE_OWN_COMMENT, UUID.randomUUID().toString())
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(input)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testUpdateOwnCommentBadRequest() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "USER")
+        );
+
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(true)
+                        .build());
+
+        mvc.perform(patch(BffRestApiRoutes.COMMENTS_API_HOTEL_UPDATE_OWN_COMMENT, "not-uuid")
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(
+                                UpdateOwnCommentBffInput.builder()
+                                        .build())))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testUpdateOwnCommentUnauthorized() throws Exception {
+        String jwtToken = "Bearer mock-jwt-token";
+        String userId = UUID.randomUUID().toString();
+
+
+        when(jwtDecoder.decodeJwt(any(jwtToken.getClass()))).thenReturn(
+                Map.of("sub", userId,
+                        "role", "USER")
+        );
+
+        when(authenticationRestExport.validateJwt(jwtToken)).thenReturn(
+                ValidateJwtOutput.builder()
+                        .isValid(false)
+                        .build());
+
+        mvc.perform(patch(BffRestApiRoutes.COMMENTS_API_HOTEL_UPDATE_OWN_COMMENT, "not-uuid")
+                        .header("Authorization", jwtToken)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(
+                                UpdateOwnCommentBffInput.builder()
+                                        .build())))
                 .andExpect(status().isUnauthorized());
     }
 }
